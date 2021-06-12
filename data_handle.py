@@ -30,9 +30,17 @@ class DataHandle:
     def trainingSet(self, percent):
         tr_size = math.floor(len(self.data) * percent)
         test_size = len(self.data) - tr_size
-        random.shuffle(self.data)
-        self.training = self.data[:tr_size]
-        self.test = self.data[tr_size:]
+        temp_data = self.data.copy()
+        random.shuffle(temp_data)
+        self.training = temp_data[:tr_size]
+        self.test = temp_data[tr_size:]
+
+    # def accuracy(self, list_predict):
+    #     truth = 0
+    #     error = 0
+    #     for i in range(len(list_predict)):
+    #         ID = list_predict[i][0]
+    #         if list_predict[i][1] == self.data[ID][5]:
 
 
     @ staticmethod
