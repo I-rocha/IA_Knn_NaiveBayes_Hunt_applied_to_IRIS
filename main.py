@@ -17,51 +17,60 @@ class IrisKNN:
 
     # Calcula as distancias e verifica os k-proximos
     def kNearest(self, k):
-        # distant = []
 
         # Verificando tamanho de K
         if k > len(self.training):
             print("K is bigger than training set. Closign application...\n")
             return 0
 
+        # Teste
         for t in self.test:
             distant = []
-            flowers = {}
-            maximum = 0
-
+            flower = {}
+            predict_list = []
             # print("########################")
+            distance = self.euclidianDistance(t)
 
-            for x in self.training:
-                # Distant contem (ID, nome da flor, distancia com relacao a t)
-                distant.append([x[0], x[5],
-                                self.fd(float(x[1]), float(x[2]), float(x[3]), float(x[4]), float(t[1]), float(t[2]),
-                                        float(t[3]), float(t[4]))])
+            # Ordena de acordo com proximidade
+            distance = sorted(distance, key=lambda dx: dx[2])
 
-            # Ordena de acordo com a distancia
-            distant = sorted(distant, key=lambda dx: dx[2])
+            #for line in distant:
+            #   print(line)
 
-            for line in distant:
-                print(line)
+            flower = IrisKNN.classification(k, distance)
+            predict_list.append(flower.items()[0])  # Extract name predicted
+        return predict_list
 
-            # Seleciona os K's mais proximos
-            for i in range(k):
-                flowers.setdefault(distant[i][1], int(0))
-                flowers[str(distant[i][1])] += 1
+    # t -> to predict.
+    def euclidianDistance(self, t):
+        distant = []
+        for x in self.training:
+            # Distant contem (ID, nome da flor, distancia com relacao a t)
+            distant.append([x[0], x[5],
+                            self.fd(float(x[1]), float(x[2]), float(x[3]), float(x[4]), float(t[1]), float(t[2]),
+                                    float(t[3]), float(t[4]))])
+        return distant
 
-            # Soma dos K's mais proximos
-            for flow_name, value in flowers.items():
-                if value > maximum:
-                    name = flow_name
-                    maximum = value
-            print("Name: {} ID:{} {}".format(name, t[0], value))
+    # Classifica com base nos K-proximos e lista de distancia
+    def classification(k, distance):
+        flowers = {}
+        total = 0
 
-    # Lista todas as distancias
-    # def listDistant(self):
+        # Soma dos K's mais proximos
+        for i in range(k):
+            flowers.setdefault(distance[i][1], int(0))
+            flowers[str(distance[i][1])] += 1
 
+        # Classifica quem teve mais ocorrência
+        for flow_name, value in flowers.items():
+            if value > total:
+                name = flow_name
+                total = value
+        return {name: total}
 
 # Pega caminho de dados
 def getPath():
-    # folder = ""   # Use as automatically path if want
+    # folder = ""   # Use as auto path if want
     folder = ""
     filename = "Iris.csv"
     print("Starting application...\n")
@@ -91,8 +100,8 @@ if __name__ == '__main__':
     subset.readCSV()
     subset.trainingSet(0.7)       # 70% em treinamento
     #DataHandle.printContent(subset.training)
-    #knn = IrisKNN(data.training, data.test)
-    #knn.kNearest(5)
+    knn = IrisKNN(subset.training, subset.test)
+    knn.kNearest(5)
 
     # knn.printContent(knn.test)
     # knn.printContent()
