@@ -39,7 +39,7 @@ class IrisKNN:
             #   print(line)
 
             flower = IrisKNN.classification(k, distance)
-            predict_list.append(list(flower.keys())[0])  # Extract name predicted
+            predict_list.append([t[0], list(flower.keys())[0]])  # Extract ID and name predicted
         return predict_list
 
     # t -> to predict.
@@ -93,16 +93,12 @@ def getPath():
         print("Option invalid...closing application\n")
     return path
 
-
+import random
 if __name__ == '__main__':
 
     # le CSV
     subset = DataHandle(getPath())
     subset.readCSV()
     subset.trainingSet(0.7)       # 70% em treinamento
-    #DataHandle.printContent(subset.training)
     knn = IrisKNN(subset.training, subset.test)
     print(knn.kNearest(5))
-
-    # knn.printContent(knn.test)
-    # knn.printContent()

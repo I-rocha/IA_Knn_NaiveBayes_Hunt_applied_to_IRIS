@@ -1,6 +1,6 @@
 import csv
 import math
-
+import random
 
 class DataHandle:
 
@@ -26,11 +26,14 @@ class DataHandle:
             # Elimina primeira linha
             self.data.pop(0)
 
-    # Separa os elementos de treinamento e teste
+    # Separa os elementos de treinamento e teste aleatoriamente
     def trainingSet(self, percent):
         tr_size = math.floor(len(self.data) * percent)
+        test_size = len(self.data) - tr_size
+        random.shuffle(self.data)
         self.training = self.data[:tr_size]
         self.test = self.data[tr_size:]
+
 
     @ staticmethod
     # Imprime elementos um a um
