@@ -96,9 +96,20 @@ def getPath():
 import random
 if __name__ == '__main__':
 
-    # le CSV
+    # le CSV #
     subset = DataHandle(getPath())
     subset.readCSV()
-    subset.trainingSet(0.7)       # 70% em treinamento
+
+    # Knn
+    subset.trainingSet(0.7) # 70%
     knn = IrisKNN(subset.training, subset.test)
-    print(knn.kNearest(5))
+    predict = knn.kNearest(5)
+    acc = subset.accuracy(predict)
+
+    # Results #
+
+    # Shows truth X predict
+    subset.showsDiff(predict)
+
+    # Accuracy
+    print(acc)
