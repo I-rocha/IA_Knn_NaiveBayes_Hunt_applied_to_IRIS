@@ -93,7 +93,6 @@ def getPath():
         print("Option invalid...closing application\n")
     return path
 
-import random
 if __name__ == '__main__':
 
     # le CSV #
