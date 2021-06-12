@@ -2,8 +2,8 @@
 # Algorithm knn. Iris Dataset #
 
 
-from data_handle import DataHandle
-from KNN import IrisKNN
+from Source.data_handle import DataHandle
+from Source.KNN import IrisKNN
 
 # Pega caminho de dados
 def getPath():
