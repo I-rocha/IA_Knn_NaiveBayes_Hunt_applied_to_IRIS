@@ -35,13 +35,27 @@ class DataHandle:
         self.training = temp_data[:tr_size]
         self.test = temp_data[tr_size:]
 
-    # def accuracy(self, list_predict):
-    #     truth = 0
-    #     error = 0
-    #     for i in range(len(list_predict)):
-    #         ID = list_predict[i][0]
-    #         if list_predict[i][1] == self.data[ID][5]:
+    # Imprime comparação entre real e predito
+    def showsDiff(self, list_predict):
+        print("")
+        for i in range(len(list_predict)):
+            ID = int(list_predict[i][0])
+            index = ID - 1
+            print("Truth: {}\nPredict: {}".format(self.data[index][5], list_predict[i][1]))
+            print("")
 
+    # Acuracia (acertos/total)
+    def accuracy(self, list_predict):
+        truth = 0
+        error = 0
+        for i in range(len(list_predict)):
+            ID = int(list_predict[i][0])
+            index = ID - 1
+            if list_predict[i][1] == self.data[index][5]:
+                truth += 1
+            else:
+                error += 1
+        return truth/len(list_predict)
 
     @ staticmethod
     # Imprime elementos um a um
