@@ -1,48 +1,19 @@
 # Israel Rocha #
 # Algorithm knn. Iris Dataset #
 
-import csv
 import math
-
-
-def printContent(data):
-    for row in data:
-        for single in row:
-            print(single)
+from data_handle import DataHandle
 
 
 class IrisKNN:
 
-    def __init__(self, path):
-        self.path = path  # path do csv
-        self.data = []  # inicia com dados vazios
-        self.training = []  #
-        self.test = []  # Dados para teste
+    def __init__(self, training, test):
 
         # funcao de distancia
         self.fd = lambda x1, x2, x3, x4, _x1, _x2, _x3, _x4: math.sqrt(
             (x1 - _x1) ** 2 + (x2 - _x2) ** 2 + (x3 - _x3) ** 2 + (x4 - _x4) ** 2)
-
-    # Le arquivo csv separado por ','
-    def readCSV(self):
-
-        # abre arquivo
-        with open(self.path, mode='r') as file:
-            # objeto
-            reader = csv.reader(file)
-
-            # Cada linha
-            for row in reader:
-                self.data.append(row)
-
-            # Elimina primeira linha
-            self.data.pop(0)
-
-    # Imprime elementos um a um
-    def trainingSet(self, percent):
-        tr_size = math.floor(len(self.data) * percent)
-        self.training = self.data[:tr_size]
-        self.test = self.data[tr_size:]
+        self.training = training
+        self.test = test
 
     # Calcula as distancias e verifica os k-proximos
     def kNearest(self, k):
@@ -88,14 +59,14 @@ class IrisKNN:
     # def listDistant(self):
 
 
-if __name__ == '__main__':
-    # folder = ""   # Use as automatically path if wants
+# Pega caminho de dados
+def getPath():
+    # folder = ""   # Use as automatically path if want
     folder = ""
     filename = "Iris.csv"
     print("Starting application...\n")
     print("Select:\n(1)If csv is in the same folder as .py")
     print("(2)If want to put manually the entire path (Ex: C:/somefolder/Iris.csv)\n")
-
     opt = int(input())
 
     # path padrao
@@ -110,12 +81,18 @@ if __name__ == '__main__':
     # erro
     else:
         print("Option invalid...closing application\n")
+    return path
 
-    knn = IrisKNN(folder + filename)
-    knn.readCSV()
-    knn.trainingSet(0.7)
 
-    knn.kNearest(5)
+if __name__ == '__main__':
+
+    # le CSV
+    subset = DataHandle(getPath())
+    subset.readCSV()
+    subset.trainingSet(0.7)       # 70% em treinamento
+    #DataHandle.printContent(subset.training)
+    #knn = IrisKNN(data.training, data.test)
+    #knn.kNearest(5)
 
     # knn.printContent(knn.test)
     # knn.printContent()
