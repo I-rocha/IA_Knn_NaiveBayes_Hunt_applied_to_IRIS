@@ -17,6 +17,7 @@ class IrisKNN:
 
     # Calcula as distancias e verifica os k-proximos
     def kNearest(self, k):
+        predict_list = []
 
         # Verificando tamanho de K
         if k > len(self.training):
@@ -27,7 +28,7 @@ class IrisKNN:
         for t in self.test:
             distant = []
             flower = {}
-            predict_list = []
+
             # print("########################")
             distance = self.euclidianDistance(t)
 
@@ -38,7 +39,7 @@ class IrisKNN:
             #   print(line)
 
             flower = IrisKNN.classification(k, distance)
-            predict_list.append(flower.items()[0])  # Extract name predicted
+            predict_list.append(list(flower.keys())[0])  # Extract name predicted
         return predict_list
 
     # t -> to predict.
@@ -101,7 +102,7 @@ if __name__ == '__main__':
     subset.trainingSet(0.7)       # 70% em treinamento
     #DataHandle.printContent(subset.training)
     knn = IrisKNN(subset.training, subset.test)
-    knn.kNearest(5)
+    print(knn.kNearest(5))
 
     # knn.printContent(knn.test)
     # knn.printContent()
