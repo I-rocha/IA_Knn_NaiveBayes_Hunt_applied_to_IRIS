@@ -17,14 +17,16 @@ class NBIris:
 
             # Calcula qtd total de cada par (flor, attr)
             for i in range(1,5):
-                self.pAttr.setdefault(line[5], {})                  # Verifica existencia de chave flor
-                self.pAttr[line[5]].setdefault(line[i], float(0))   # Verifica existencia de chave attr
-                self.pAttr[line[5]][line[i]] += 1
+                self.pAttr.setdefault(line[5], {})                      # Verifica existencia de chave flor
+                self.pAttr[line[5]].setdefault(i, {})                   # Verifica existencia de chave attr
+                self.pAttr[line[5]][i].setdefault(line[i], float(0))    # Verifica existencia de chave valor
+                self.pAttr[line[5]][i][line[i]] += 1
 
         # Freq relativa de (flor|attr)
         for k_flow, v_flow in self.pAttr.items():
             for k_attr, v_attr in v_flow.items():
-                self.pAttr[k_flow][k_attr] = v_attr / self.pFlower[k_flow]
+                for k_val, v_val in v_attr.items():
+                    self.pAttr[k_flow][k_attr][k_val] = v_val / self.pFlower[k_flow]
 
         # Freq relativa de flores
         for k, v in self.pFlower.items():
