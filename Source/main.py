@@ -4,6 +4,7 @@
 
 from Source.data_handle import DataHandle
 from Source.KNN import IrisKNN
+from Source.NaiveBayes import NBIris
 
 # Pega caminho de dados
 def getPath():
@@ -35,16 +36,23 @@ if __name__ == '__main__':
     subset = DataHandle(getPath())
     subset.readCSV()
 
-    # Knn
+
+    # Naive Bayes
+    subset.discret(3)
     subset.trainingSet(0.7) # 70%
-    knn = IrisKNN(subset.training, subset.test)
-    predict = knn.kNearest(5)
+    naive = NBIris(subset.training, subset.test)
+    naive.train()
+    predict = naive.predict()
+
+    # # Knn
+    # knn = IrisKNN(subset.training, subset.test)
+    # predict = knn.kNearest(5)
     acc = subset.accuracy(predict)
-
-    # Results #
-
-    # Shows truth X predict
+    #
+    # # Results #
+    #
+    # # Shows truth X predict
     subset.showsDiff(predict)
-
-    # Accuracy
+    #
+    # # Accuracy
     print(acc)
