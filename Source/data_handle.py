@@ -41,6 +41,7 @@ class DataHandle:
         for i in range(len(list_predict)):
             ID = int(list_predict[i][0])
             index = ID - 1
+            print(self.test[i][0])  # ID
             print("Truth: {}\nPredict: {}".format(self.data[index][5], list_predict[i][1]))
             print("")
 
