@@ -10,13 +10,14 @@ class NBIris:
 
     # Discretiz dados de subdata
     def discret(self, subdata):
+
         # Calcula a qual classe o valor pertence
         f = lambda val, ini, step: math.floor((val - ini)/step)
 
         for data in subdata:
             for i_attr in range(4):
 
-                if float(data[i_attr + 1]) <= self.interval_attr[i_attr][0]:
+                if float(data[i_attr + 1]) < self.interval_attr[i_attr][0]:
                     data[i_attr + 1] = 0
 
                 elif float(data[i_attr + 1]) >= self.interval_attr[i_attr][1]:
@@ -30,8 +31,6 @@ class NBIris:
     def calculateInterval(self):
         # Tamanho do intervalo discreto para cada atributo
         step = []
-        # lim_sup = []
-        # lim_inf = []
 
         # Calcula limite superior do intevalo
         f = lambda finterval, fdf, flim_inf: finterval * fdf + flim_inf
@@ -39,23 +38,11 @@ class NBIris:
 
         # Cada atributo
         for i in range(1, 5):
-            mini = float(min(self.training, key=lambda a: a[i])[i])
-            maxi = float(max(self.training, key=lambda a: a[i])[i])
+            lim_inf = float(min(self.training, key=lambda a: a[i])[i])
+            lim_sup = round(float(max(self.training, key=lambda a: a[i])[i]))
 
-            step = (maxi - mini) / n_class
-            # lim_sup.append(maxi)
-            # lim_inf.append(mini)
-
-            self.interval_attr.append([mini, maxi, step])
-
-        # # Atualiza dados com valores discretos
-        # for line in self.data:
-        #     for i in range(1, 5):
-        #         df = 1
-        #
-        #         while float(line[i]) > float(f(step[i - 1], df, lim_inf[i - 1])):
-        #             df += 1
-        #         line[i] = df
+            step = (lim_sup - lim_inf) / n_class
+            self.interval_attr.append([lim_inf, lim_sup, step])
 
     # Aprendendo as probabilidades
     def train(self):
@@ -79,9 +66,6 @@ class NBIris:
                     universe[i].append(var_step)
                     var_step += 1
 
-                # if line[i] not in universe[i-1]:
-                #     universe[i-1].append(line[i])
-
         # Cria todas as possiveis chaves
         for f in flowers:
             for i in range(4):
@@ -96,10 +80,13 @@ class NBIris:
             for i in range(1,5):
                 if line[5] not in self.pAttr:
                     print("A5 {} ID {}".format(line[5], line[0]))
+                    print(self.interval_attr)
                 if i-1 not in self.pAttr[line[5]]:
                     print("i-1 {} ID {}".format(i-1, line[0]))
+                    print(self.interval_attr)
                 if line[i] not in self.pAttr[line[5]][i-1]:
                     print("line(i) {} ID {}".format(line[i], line[0]))
+                    print(self.interval_attr)
                 self.pAttr[line[5]][i-1][int(line[i])] += 1
 
         # Freq relativa de (flor|attr)
@@ -129,26 +116,17 @@ class NBIris:
 
             for k_flower, v_flower in self.pFlower.items():
                 name = k_flower
-                print("name {} a1 {} a2 {} a3 {} a4 {}".format(name, a1, a2, a3, a4))
-                if a1 not in self.pAttr[name][0]:
-                    print("a1 not in list ID {}".format(t[0]))
-                if a2 not in self.pAttr[name][1]:
-                    print("a2 not in list ID {}".format(t[0]))
-
-                if a3 not in self.pAttr[name][2]:
-                    print("a3 not in list ID {}".format(t[0]))
-
-                if a4 not in self.pAttr[name][3]:
-                    print("a4 not in list ID {}".format(t[0]))
 
                 pa1 = self.pAttr[name][0][a1]
                 pa2 = self.pAttr[name][1][a2]
                 pa3 = self.pAttr[name][2][a3]
                 pa4 = self.pAttr[name][3][a4]
                 prob.append([name, f(v_flower, pa1, pa2, pa3, pa4)])
-                print("name {} pa1 {} pa2 {} pa3 {} pa4 {}".format(name, pa1, pa2, pa3, pa4))
-            print("########## Flower ###################")
-            predict = max(prob, key=lambda a:a[1])[0]
+
+            #     print("name {} pa1 {} pa2 {} pa3 {} pa4 {}".format(name, pa1, pa2, pa3, pa4))
+            # print("########## Flower ###################")
+
+            predict = max(prob, key=lambda a: a[1])[0]
             predict_list.append([t[0], predict])
 
         return predict_list
