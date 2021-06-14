@@ -58,32 +58,6 @@ class DataHandle:
                 error += 1
         return truth/len(list_predict)
 
-    # Discretiza atributos em s subclasses
-    def discret(self, s):
-        # Tamanho do intervalo discreto para cada atributo
-        interval = []
-        lim_inf = []
-
-        # Calcula limite superior do intevalo
-        f = lambda finterval, fdf, flim_inf: finterval * fdf + flim_inf
-
-        # Cada atributo
-        for i in range(1, 5):
-            maxi = float(max(self.data, key=lambda a: a[i])[i])
-            mini = float(min(self.data, key=lambda a: a[i])[i])
-
-            interval.append((maxi - mini) / s)
-            lim_inf.append(mini)
-
-        # Atualiza dados com valores discretos
-        for line in self.data:
-            for i in range(1, 5):
-                df = 1
-
-                while float(line[i]) > float(f(interval[i-1], df, lim_inf[i-1])):
-                    df += 1
-                line[i] = df
-
 
     @ staticmethod
     # Imprime elementos um a um
